@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    
+    <vTypeDistribution id="mixedTraffic">
+        <vType id="moto" vClass="motorcycle" probability="0.5" lcSublane="10" maxSpeedLat="1" latAlignment="arbitrary"/>
+        <vType id="car" vClass="passenger" probability="0.5" lcSublane="10" maxSpeedLat="0.6" minGap="1" latAlignment="center"/>
+    </vTypeDistribution>
+    
+    <flow id="f_ete" begin="0.00" end="3600" vehsPerHour="450" departLane="random" type="mixedTraffic">
+        <route edges="eb1 eb2"/>
+    </flow>
+    <flow id="f_etn" begin="0.00" end="3600" vehsPerHour="180" departLane="random" type="mixedTraffic">
+        <route edges="eb1 nb2"/>
+    </flow>
+    <flow id="f_ets" begin="0.00" end="3600" vehsPerHour="270" departLane="random" type="mixedTraffic">
+        <route edges="eb1 sb2"/>
+    </flow>
+    <flow id="f_nte" begin="0.00" end="3600" vehsPerHour="270" departLane="random" type="mixedTraffic">
+        <route edges="nb1 eb2"/>
+    </flow>
+    <flow id="f_ntn" begin="0.00" end="3600" vehsPerHour="450" departLane="random" type="mixedTraffic">
+        <route edges="nb1 nb2"/>
+    </flow>
+    <flow id="f_ntw" begin="0.00" end="3600" vehsPerHour="180" departLane="random" type="mixedTraffic">
+        <route edges="nb1 wb2"/>
+    </flow>
+    <flow id="f_ste" begin="0.00" end="3600" vehsPerHour="180" departLane="random" type="mixedTraffic">
+        <route edges="sb1 eb2"/>
+    </flow>
+    <flow id="f_sts" begin="0.00" end="3600" vehsPerHour="450" departLane="random" type="mixedTraffic">
+        <route edges="sb1 sb2"/>
+    </flow>
+    <flow id="f_stw" begin="0.00" end="3600" vehsPerHour="270" departLane="random" type="mixedTraffic">
+        <route edges="sb1 wb2"/>
+    </flow>
+    <flow id="f_wtn" begin="0.00" end="3600" vehsPerHour="270" departLane="random" type="mixedTraffic">
+        <route edges="wb1 nb2"/>
+    </flow>
+    <flow id="f_wts" begin="0.00" end="3600" vehsPerHour="180" departLane="random" type="mixedTraffic">
+        <route edges="wb1 sb2"/>
+    </flow>
+    <flow id="f_wtw" begin="0.00" end="3600" vehsPerHour="450" departLane="random" type="mixedTraffic">
+        <route edges="wb1 wb2"/>
+    </flow>
+</routes>
