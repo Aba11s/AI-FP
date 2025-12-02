@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="6l_4w_4p.net.xml"/>
+        <route-files value="6l_4w_4p_mixed.rou.xml"/>
+    </input>
+    <processing>
+        <lateral-resolution value="0.25"/>
+    </processing>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+    </time>
+</configuration>
