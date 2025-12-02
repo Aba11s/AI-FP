@@ -1,0 +1,13 @@
+<configuration>
+    <input>
+        <net-file value="data/networks/sarinah.net.xml"/>
+        <route-files value="data/routes/jakarta_traffic.rou.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="600"/>
+    </time>
+    <processing>
+        <lateral-resolution value="0.5"/>
+    </processing>
+</configuration>

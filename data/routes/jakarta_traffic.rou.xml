@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routes>
+  <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="4.5" maxSpeed="13.89" color="1,0,0" />
+  <vType id="motorcycle" vClass="motorcycle" accel="3.0" decel="7.5" sigma="0.8" length="2.0" maxSpeed="13.89" lcStrategic="1.0" lcSpeedGain="2.0" maxSpeedLat="1.5" latAlignment="compact" color="0,0,1" />
+  <route id="route_0" edges="1252899185 511659074#0" />
+  <route id="route_1" edges="1252899185 749318782" />
+  <route id="route_2" edges="1252899185 762027855" />
+  <route id="route_3" edges="1252899185 453439714#1" />
+  <route id="route_4" edges="1252899185 492263526#1" />
+  <route id="route_5" edges="1252899185 762027857#2" />
+  <route id="route_6" edges="1252899185 492263527#1" />
+  <route id="route_7" edges="1252899185 762027857#1" />
+  <route id="route_8" edges="1252899185 521425772#1" />
+  <route id="route_9" edges="1252899185 762027857#0" />
+  <route id="route_10" edges="1252899185 556966711#1" />
+  <route id="route_11" edges="1252899185 629731294#1" />
+  <route id="route_12" edges="1252899185 762027859#1" />
+  <route id="route_13" edges="1252899185 762027858" />
+  <route id="route_14" edges="1252899185 762027859#0" />
+  <route id="route_15" edges="1252899185 814834842#1" />
+  <route id="route_16" edges="453439714#0 511659074#0" />
+  <route id="route_17" edges="453439714#0 749318782" />
+  <route id="route_18" edges="453439714#0 762027855" />
+  <route id="route_19" edges="453439714#0 453439714#1" />
+  <route id="route_20" edges="453439714#0 492263526#1" />
+  <route id="route_21" edges="453439714#0 762027857#2" />
+  <route id="route_22" edges="453439714#0 492263527#1" />
+  <route id="route_23" edges="453439714#0 762027857#1" />
+  <route id="route_24" edges="453439714#0 521425772#1" />
+  <route id="route_25" edges="453439714#0 762027857#0" />
+  <route id="route_26" edges="453439714#0 556966711#1" />
+  <route id="route_27" edges="453439714#0 629731294#1" />
+  <route id="route_28" edges="453439714#0 762027859#1" />
+  <route id="route_29" edges="453439714#0 762027858" />
+  <route id="route_30" edges="453439714#0 762027859#0" />
+  <route id="route_31" edges="453439714#0 814834842#1" />
+  <route id="route_32" edges="762027857#2 511659074#0" />
+  <route id="route_33" edges="762027857#2 749318782" />
+  <route id="route_34" edges="762027857#2 762027855" />
+  <route id="route_35" edges="762027857#2 453439714#1" />
+  <route id="route_36" edges="762027857#2 492263526#1" />
+  <route id="route_37" edges="762027857#2 492263527#1" />
+  <route id="route_38" edges="762027857#2 762027857#1" />
+  <route id="route_39" edges="762027857#2 521425772#1" />
+  <route id="route_40" edges="762027857#2 762027857#0" />
+  <route id="route_41" edges="762027857#2 556966711#1" />
+  <route id="route_42" edges="762027857#2 629731294#1" />
+  <route id="route_43" edges="762027857#2 762027859#1" />
+  <route id="route_44" edges="762027857#2 762027858" />
+  <route id="route_45" edges="762027857#2 762027859#0" />
+  <route id="route_46" edges="762027857#2 814834842#1" />
+  <route id="route_47" edges="762027859#4 511659074#0" />
+  <route id="route_48" edges="762027859#4 749318782" />
+  <route id="route_49" edges="762027859#4 762027855" />
+  <route id="route_50" edges="762027859#4 453439714#1" />
+  <route id="route_51" edges="762027859#4 492263526#1" />
+  <route id="route_52" edges="762027859#4 762027857#2" />
+  <route id="route_53" edges="762027859#4 492263527#1" />
+  <route id="route_54" edges="762027859#4 762027857#1" />
+  <route id="route_55" edges="762027859#4 521425772#1" />
+  <route id="route_56" edges="762027859#4 762027857#0" />
+  <route id="route_57" edges="762027859#4 556966711#1" />
+  <route id="route_58" edges="762027859#4 629731294#1" />
+  <route id="route_59" edges="762027859#4 762027859#1" />
+  <route id="route_60" edges="762027859#4 762027858" />
+  <route id="route_61" edges="762027859#4 762027859#0" />
+  <route id="route_62" edges="762027859#4 814834842#1" />
+  <route id="route_63" edges="492263526#0 511659074#0" />
+  <route id="route_64" edges="492263526#0 749318782" />
+  <route id="route_65" edges="492263526#0 762027855" />
+  <route id="route_66" edges="492263526#0 453439714#1" />
+  <route id="route_67" edges="492263526#0 492263526#1" />
+  <route id="route_68" edges="492263526#0 762027857#2" />
+  <route id="route_69" edges="492263526#0 492263527#1" />
+  <route id="route_70" edges="492263526#0 762027857#1" />
+  <route id="route_71" edges="492263526#0 521425772#1" />
+  <route id="route_72" edges="492263526#0 762027857#0" />
+  <route id="route_73" edges="492263526#0 556966711#1" />
+  <route id="route_74" edges="492263526#0 629731294#1" />
+  <route id="route_75" edges="492263526#0 762027859#1" />
+  <route id="route_76" edges="492263526#0 762027858" />
+  <route id="route_77" edges="492263526#0 762027859#0" />
+  <route id="route_78" edges="492263526#0 814834842#1" />
+  <route id="route_79" edges="762027857#1 511659074#0" />
+  <route id="route_80" edges="762027857#1 749318782" />
+  <route id="route_81" edges="762027857#1 762027855" />
+  <route id="route_82" edges="762027857#1 453439714#1" />
+  <route id="route_83" edges="762027857#1 492263526#1" />
+  <route id="route_84" edges="762027857#1 762027857#2" />
+  <route id="route_85" edges="762027857#1 492263527#1" />
+  <route id="route_86" edges="762027857#1 521425772#1" />
+  <route id="route_87" edges="762027857#1 762027857#0" />
+  <route id="route_88" edges="762027857#1 556966711#1" />
+  <route id="route_89" edges="762027857#1 629731294#1" />
+  <route id="route_90" edges="762027857#1 762027859#1" />
+  <route id="route_91" edges="762027857#1 762027858" />
+  <route id="route_92" edges="762027857#1 762027859#0" />
+  <route id="route_93" edges="762027857#1 814834842#1" />
+  <route id="route_94" edges="492263527#0 511659074#0" />
+  <route id="route_95" edges="492263527#0 749318782" />
+  <route id="route_96" edges="492263527#0 762027855" />
+  <route id="route_97" edges="492263527#0 453439714#1" />
+  <route id="route_98" edges="492263527#0 492263526#1" />
+  <route id="route_99" edges="492263527#0 762027857#2" />
+  <route id="route_100" edges="492263527#0 492263527#1" />
+  <route id="route_101" edges="492263527#0 762027857#1" />
+  <route id="route_102" edges="492263527#0 521425772#1" />
+  <route id="route_103" edges="492263527#0 762027857#0" />
+  <route id="route_104" edges="492263527#0 556966711#1" />
+  <route id="route_105" edges="492263527#0 629731294#1" />
+  <route id="route_106" edges="492263527#0 762027859#1" />
+  <route id="route_107" edges="492263527#0 762027858" />
+  <route id="route_108" edges="492263527#0 762027859#0" />
+  <route id="route_109" edges="492263527#0 814834842#1" />
+  <route id="route_110" edges="762027857#0 511659074#0" />
+  <route id="route_111" edges="762027857#0 749318782" />
+  <route id="route_112" edges="762027857#0 762027855" />
+  <route id="route_113" edges="762027857#0 453439714#1" />
+  <route id="route_114" edges="762027857#0 492263526#1" />
+  <route id="route_115" edges="762027857#0 762027857#2" />
+  <route id="route_116" edges="762027857#0 492263527#1" />
+  <route id="route_117" edges="762027857#0 762027857#1" />
+  <route id="route_118" edges="762027857#0 521425772#1" />
+  <route id="route_119" edges="762027857#0 556966711#1" />
+  <route id="route_120" edges="762027857#0 629731294#1" />
+  <route id="route_121" edges="762027857#0 762027859#1" />
+  <route id="route_122" edges="762027857#0 762027858" />
+  <route id="route_123" edges="762027857#0 762027859#0" />
+  <route id="route_124" edges="762027857#0 814834842#1" />
+  <route id="route_125" edges="511659074#2 511659074#0" />
+  <route id="route_126" edges="511659074#2 749318782" />
+  <route id="route_127" edges="511659074#2 762027855" />
+  <route id="route_128" edges="511659074#2 453439714#1" />
+  <route id="route_129" edges="511659074#2 492263526#1" />
+  <route id="route_130" edges="511659074#2 762027857#2" />
+  <route id="route_131" edges="511659074#2 492263527#1" />
+  <route id="route_132" edges="511659074#2 762027857#1" />
+  <route id="route_133" edges="511659074#2 521425772#1" />
+  <route id="route_134" edges="511659074#2 762027857#0" />
+  <route id="route_135" edges="511659074#2 556966711#1" />
+  <route id="route_136" edges="511659074#2 629731294#1" />
+  <route id="route_137" edges="511659074#2 762027859#1" />
+  <route id="route_138" edges="511659074#2 762027858" />
+  <route id="route_139" edges="511659074#2 762027859#0" />
+  <route id="route_140" edges="511659074#2 814834842#1" />
+  <route id="route_141" edges="521425772#0 511659074#0" />
+  <route id="route_142" edges="521425772#0 749318782" />
+  <route id="route_143" edges="521425772#0 762027855" />
+  <route id="route_144" edges="521425772#0 453439714#1" />
+  <route id="route_145" edges="521425772#0 492263526#1" />
+  <route id="route_146" edges="521425772#0 762027857#2" />
+  <route id="route_147" edges="521425772#0 492263527#1" />
+  <route id="route_148" edges="521425772#0 762027857#1" />
+  <route id="route_149" edges="521425772#0 521425772#1" />
+  <route id="route_150" edges="521425772#0 762027857#0" />
+  <route id="route_151" edges="521425772#0 556966711#1" />
+  <route id="route_152" edges="521425772#0 629731294#1" />
+  <route id="route_153" edges="521425772#0 762027859#1" />
+  <route id="route_154" edges="521425772#0 762027858" />
+  <route id="route_155" edges="521425772#0 762027859#0" />
+  <route id="route_156" edges="521425772#0 814834842#1" />
+  <route id="route_157" edges="556966711#0 511659074#0" />
+  <route id="route_158" edges="556966711#0 749318782" />
+  <route id="route_159" edges="556966711#0 762027855" />
+  <route id="route_160" edges="556966711#0 453439714#1" />
+  <route id="route_161" edges="556966711#0 492263526#1" />
+  <route id="route_162" edges="556966711#0 762027857#2" />
+  <route id="route_163" edges="556966711#0 492263527#1" />
+  <route id="route_164" edges="556966711#0 762027857#1" />
+  <route id="route_165" edges="556966711#0 521425772#1" />
+  <route id="route_166" edges="556966711#0 762027857#0" />
+  <route id="route_167" edges="556966711#0 556966711#1" />
+  <route id="route_168" edges="556966711#0 629731294#1" />
+  <route id="route_169" edges="556966711#0 762027859#1" />
+  <route id="route_170" edges="556966711#0 762027858" />
+  <route id="route_171" edges="556966711#0 762027859#0" />
+  <route id="route_172" edges="556966711#0 814834842#1" />
+  <route id="route_173" edges="762027855 511659074#0" />
+  <route id="route_174" edges="762027855 749318782" />
+  <route id="route_175" edges="762027855 453439714#1" />
+  <route id="route_176" edges="762027855 492263526#1" />
+  <route id="route_177" edges="762027855 762027857#2" />
+  <route id="route_178" edges="762027855 492263527#1" />
+  <route id="route_179" edges="762027855 762027857#1" />
+  <route id="route_180" edges="762027855 521425772#1" />
+  <route id="route_181" edges="762027855 762027857#0" />
+  <route id="route_182" edges="762027855 556966711#1" />
+  <route id="route_183" edges="762027855 629731294#1" />
+  <route id="route_184" edges="762027855 762027859#1" />
+  <route id="route_185" edges="762027855 762027858" />
+  <route id="route_186" edges="762027855 762027859#0" />
+  <route id="route_187" edges="762027855 814834842#1" />
+  <route id="route_188" edges="762027858 511659074#0" />
+  <route id="route_189" edges="762027858 749318782" />
+  <route id="route_190" edges="762027858 762027855" />
+  <route id="route_191" edges="762027858 453439714#1" />
+  <route id="route_192" edges="762027858 492263526#1" />
+  <route id="route_193" edges="762027858 762027857#2" />
+  <route id="route_194" edges="762027858 492263527#1" />
+  <route id="route_195" edges="762027858 762027857#1" />
+  <route id="route_196" edges="762027858 521425772#1" />
+  <route id="route_197" edges="762027858 762027857#0" />
+  <route id="route_198" edges="762027858 556966711#1" />
+  <route id="route_199" edges="762027858 629731294#1" />
+  <route id="route_200" edges="762027858 762027859#1" />
+  <route id="route_201" edges="762027858 762027859#0" />
+  <route id="route_202" edges="762027858 814834842#1" />
+  <route id="route_203" edges="629731294#0 511659074#0" />
+  <route id="route_204" edges="629731294#0 749318782" />
+  <route id="route_205" edges="629731294#0 762027855" />
+  <route id="route_206" edges="629731294#0 453439714#1" />
+  <route id="route_207" edges="629731294#0 492263526#1" />
+  <route id="route_208" edges="629731294#0 762027857#2" />
+  <route id="route_209" edges="629731294#0 492263527#1" />
+  <route id="route_210" edges="629731294#0 762027857#1" />
+  <route id="route_211" edges="629731294#0 521425772#1" />
+  <route id="route_212" edges="629731294#0 762027857#0" />
+  <route id="route_213" edges="629731294#0 556966711#1" />
+  <route id="route_214" edges="629731294#0 629731294#1" />
+  <route id="route_215" edges="629731294#0 762027859#1" />
+  <route id="route_216" edges="629731294#0 762027858" />
+  <route id="route_217" edges="629731294#0 762027859#0" />
+  <route id="route_218" edges="629731294#0 814834842#1" />
+  <route id="route_219" edges="762027859#0 511659074#0" />
+  <route id="route_220" edges="762027859#0 749318782" />
+  <route id="route_221" edges="762027859#0 762027855" />
+  <route id="route_222" edges="762027859#0 453439714#1" />
+  <route id="route_223" edges="762027859#0 492263526#1" />
+  <route id="route_224" edges="762027859#0 762027857#2" />
+  <route id="route_225" edges="762027859#0 492263527#1" />
+  <route id="route_226" edges="762027859#0 762027857#1" />
+  <route id="route_227" edges="762027859#0 521425772#1" />
+  <route id="route_228" edges="762027859#0 762027857#0" />
+  <route id="route_229" edges="762027859#0 556966711#1" />
+  <route id="route_230" edges="762027859#0 629731294#1" />
+  <route id="route_231" edges="762027859#0 762027859#1" />
+  <route id="route_232" edges="762027859#0 762027858" />
+  <route id="route_233" edges="762027859#0 814834842#1" />
+  <route id="route_234" edges="814834842#0 511659074#0" />
+  <route id="route_235" edges="814834842#0 749318782" />
+  <route id="route_236" edges="814834842#0 762027855" />
+  <route id="route_237" edges="814834842#0 453439714#1" />
+  <route id="route_238" edges="814834842#0 492263526#1" />
+  <route id="route_239" edges="814834842#0 762027857#2" />
+  <route id="route_240" edges="814834842#0 492263527#1" />
+  <route id="route_241" edges="814834842#0 762027857#1" />
+  <route id="route_242" edges="814834842#0 521425772#1" />
+  <route id="route_243" edges="814834842#0 762027857#0" />
+  <route id="route_244" edges="814834842#0 556966711#1" />
+  <route id="route_245" edges="814834842#0 629731294#1" />
+  <route id="route_246" edges="814834842#0 762027859#1" />
+  <route id="route_247" edges="814834842#0 762027858" />
+  <route id="route_248" edges="814834842#0 762027859#0" />
+  <route id="route_249" edges="814834842#0 814834842#1" />
+  <vehicle id="veh_0" type="motorcycle" route="route_86" depart="141.45992083840673" />
+  <vehicle id="veh_1" type="motorcycle" route="route_211" depart="196.24150913787602" />
+  <vehicle id="veh_2" type="car" route="route_211" depart="265.2320265111897" />
+  <vehicle id="veh_3" type="motorcycle" route="route_220" depart="17.397818106659614" />
+  <vehicle id="veh_4" type="motorcycle" route="route_161" depart="236.96553778907756" />
+  <vehicle id="veh_5" type="car" route="route_36" depart="123.17359556272068" />
+  <vehicle id="veh_6" type="motorcycle" route="route_73" depart="39.90712657111787" />
+  <vehicle id="veh_7" type="motorcycle" route="route_165" depart="170.97772333642732" />
+  <vehicle id="veh_8" type="motorcycle" route="route_114" depart="277.3266355658464" />
+  <vehicle id="veh_9" type="motorcycle" route="route_226" depart="191.9240507117177" />
+  <vehicle id="veh_10" type="motorcycle" route="route_188" depart="152.21219454620396" />
+  <vehicle id="veh_11" type="motorcycle" route="route_2" depart="222.3593312130502" />
+  <vehicle id="veh_12" type="motorcycle" route="route_102" depart="153.25258891860244" />
+  <vehicle id="veh_13" type="motorcycle" route="route_137" depart="159.3507869084732" />
+  <vehicle id="veh_14" type="motorcycle" route="route_226" depart="65.20957277512004" />
+  <vehicle id="veh_15" type="car" route="route_202" depart="271.79185388653354" />
+  <vehicle id="veh_16" type="motorcycle" route="route_231" depart="271.3800011104513" />
+  <vehicle id="veh_17" type="motorcycle" route="route_45" depart="101.20926107366839" />
+  <vehicle id="veh_18" type="car" route="route_77" depart="76.64527785153187" />
+  <vehicle id="veh_19" type="motorcycle" route="route_217" depart="299.3015360915216" />
+  <vehicle id="veh_20" type="motorcycle" route="route_55" depart="67.34607626642826" />
+  <vehicle id="veh_21" type="motorcycle" route="route_174" depart="265.489233902534" />
+  <vehicle id="veh_22" type="motorcycle" route="route_124" depart="134.1479861954656" />
+  <vehicle id="veh_23" type="motorcycle" route="route_3" depart="34.1637748549778" />
+  <vehicle id="veh_24" type="motorcycle" route="route_89" depart="68.11979871508605" />
+  <vehicle id="veh_25" type="car" route="route_73" depart="252.23110653548076" />
+  <vehicle id="veh_26" type="car" route="route_46" depart="172.3072705393226" />
+  <vehicle id="veh_27" type="motorcycle" route="route_20" depart="86.48625027540807" />
+  <vehicle id="veh_28" type="motorcycle" route="route_73" depart="61.82120493464605" />
+  <vehicle id="veh_29" type="motorcycle" route="route_238" depart="16.733775948018547" />
+  <vehicle id="veh_30" type="motorcycle" route="route_166" depart="106.89736858253886" />
+  <vehicle id="veh_31" type="motorcycle" route="route_86" depart="10.748846834503055" />
+  <vehicle id="veh_32" type="motorcycle" route="route_243" depart="110.77317934347275" />
+  <vehicle id="veh_33" type="motorcycle" route="route_11" depart="144.09006803053515" />
+  <vehicle id="veh_34" type="motorcycle" route="route_34" depart="284.0066289521632" />
+  <vehicle id="veh_35" type="motorcycle" route="route_141" depart="282.5786477815228" />
+  <vehicle id="veh_36" type="car" route="route_53" depart="107.89931849624878" />
+  <vehicle id="veh_37" type="motorcycle" route="route_236" depart="164.59177881541655" />
+  <vehicle id="veh_38" type="motorcycle" route="route_208" depart="155.4068230468322" />
+  <vehicle id="veh_39" type="motorcycle" route="route_49" depart="181.41819912699614" />
+  <vehicle id="veh_40" type="car" route="route_147" depart="37.5507866034093" />
+  <vehicle id="veh_41" type="car" route="route_101" depart="62.56465259853727" />
+  <vehicle id="veh_42" type="motorcycle" route="route_145" depart="82.44740953776369" />
+  <vehicle id="veh_43" type="motorcycle" route="route_232" depart="75.13472321288599" />
+  <vehicle id="veh_44" type="car" route="route_217" depart="58.23684902789324" />
+  <vehicle id="veh_45" type="motorcycle" route="route_201" depart="107.96032501561156" />
+  <vehicle id="veh_46" type="motorcycle" route="route_35" depart="261.98703384022957" />
+  <vehicle id="veh_47" type="motorcycle" route="route_99" depart="48.865937672079994" />
+  <vehicle id="veh_48" type="car" route="route_7" depart="159.94488771286527" />
+  <vehicle id="veh_49" type="motorcycle" route="route_33" depart="7.374147202805559" />
+</routes>
