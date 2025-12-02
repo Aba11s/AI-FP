@@ -115,10 +115,10 @@
     </edge>
 
     <tlLogic id="j1" type="static" programID="0" offset="0">
-        <phase duration="30" state="rrrrrrrrrrrrGGGg" name="east_g"/>
-        <phase duration="30" state="rrrrGGGGrrrrrrrr" name="west_g"/>
-        <phase duration="30" state="rrrrrrrrGGGgrrrr" name="north_g"/>
-        <phase duration="30" state="GGGGrrrrrrrrrrrr" name="south_g"/>
+        <phase duration="30" state="rrrrrrrrrrrrGGGg" name="westbound_green"/>
+        <phase duration="30" state="rrrrGGGGrrrrrrrr" name="eastbound_green"/>
+        <phase duration="30" state="rrrrrrrrGGGgrrrr" name="southbound_green"/>
+        <phase duration="30" state="GGGGrrrrrrrrrrrr" name="northbound_green"/>
     </tlLogic>
 
     <junction id="eastnode" type="dead_end" x="-290.65" y="3.27" incLanes="wb2_0 wb2_1 wb2_2" intLanes="" shape="-290.65,3.27 -290.64,12.87 -290.65,3.27"/>

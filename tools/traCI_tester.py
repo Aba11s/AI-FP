@@ -28,6 +28,7 @@ def run_simulation_with_traci(config_path):
             "-c", config_path,
             "--no-step-log",
             "--quit-on-end",
+            "--no-warnings", 
             "--time-to-teleport", "300",  # Teleport stuck vehicles after 300 seconds
         ]
         
