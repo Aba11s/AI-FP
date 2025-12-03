@@ -2,4 +2,4 @@ from simulator import Simulator
 
 sim = Simulator()
 
-sim.simulate([10,10,10,10])
+sim.simulate([15,15,15,15])

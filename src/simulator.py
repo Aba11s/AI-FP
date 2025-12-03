@@ -14,39 +14,60 @@ class Simulator:
     tl_id = c.JUNCTION_ID
     steps = c.MAX_EVAL_STEPS
 
-    def apply_new_tlogic(self, gene):
+    def apply_new_tlogic(self, gene, debug=False):
         logics = traci.trafficlight.getAllProgramLogics(self.tl_id)
         original_logic = logics[0]
         original_phases = original_logic.phases
-
-        # create new phases
+        
+        # Create new phases with yellow insertion
         new_phases = []
-        for i, duration in enumerate(gene):
-            old_phase = original_phases[i]
-
+        yellow_duration = 3.0  # Fixed 3-second yellow phase
+        
+        for i, (duration, old_phase) in enumerate(zip(gene, original_phases)):
+            # Add the current phase (green or other)
             new_phase = traci.trafficlight.Phase(
-                duration=float(duration),  # Your gene duration
-                state=old_phase.state,     # Keep original light pattern
-                minDur=old_phase.minDur,   # Keep original min duration
-                maxDur=old_phase.maxDur    # Keep original max duration
+                duration=float(duration),
+                state=old_phase.state,
+                minDur=old_phase.minDur,
+                maxDur=old_phase.maxDur
             )
             new_phases.append(new_phase)
-
+            
+            # Check if we need a yellow phase after this phase
+            # Create yellow phase by changing all non-red signals to yellow
+            current_state = old_phase.state
+            yellow_state = ""
+            
+            for char in current_state:
+                if char == 'r' or char == 'R':
+                    yellow_state += char  # Keep red as red
+                else:
+                    yellow_state += 'y'   # Change everything else to yellow
+            
+            # Only add yellow phase if it's different from current state
+            # (i.e., if there were any non-red signals to change)
+            if yellow_state != current_state:
+                yellow_phase = traci.trafficlight.Phase(
+                    duration=yellow_duration,
+                    state=yellow_state,
+                    minDur=yellow_duration,  # Fixed duration
+                    maxDur=yellow_duration   # Fixed duration
+                )
+                new_phases.append(yellow_phase)
+        
         new_logic = traci.trafficlight.Logic(
             programID=f"optimized_{traci.simulation.getTime()}",
-            type=original_logic.type,           # Keep original program type
+            type=original_logic.type,
             currentPhaseIndex=original_logic.currentPhaseIndex,
             phases=new_phases,
             subParameter=original_logic.subParameter
         )
-
-        traci.trafficlight.setProgramLogic(self.tl_id, new_logic)
-        current_phases = traci.trafficlight.getAllProgramLogics(self.tl_id)[0].phases
-        applied_durations = [phase.duration for phase in current_phases]
         
-        print(f"Applied gene {gene} to {self.tl_id}")
+        traci.trafficlight.setProgramLogic(self.tl_id, new_logic)
+        if debug:
+            print(f"Applied gene {gene} to {self.tl_id} with yellow phases added")
 
-    def simulate(self, gene=None):
+    def simulate(self, gene=None, debug=False):
         
         # Command parameters
         sumo_cmd = [
@@ -54,7 +75,7 @@ class Simulator:
             "-c", self.config_file,
             "--no-step-log",
             "--quit-on-end",
-            "--no-warnings", 
+            "--no-warnings",
             "--time-to-teleport", "300",  # Teleport stuck vehicles after 300 seconds
         ]
 
@@ -63,12 +84,14 @@ class Simulator:
             'total_steps': 0,
             'vehicle_stats': {}, # key: veh_id, value: dictionary of vehicle stats
             'total_waiting_time': 0,
+            'total_time_loss': 0,
+            'total_queue_length': 0,
             'departed_count': 0,
             'arrived_count': 0,
             'running_vehicles': 0,
         }
 
-        print("Running Simulation")
+        #print("Running Simulation")
 
         # Track vehicles that have departed and arrived
         departed_vehicles = set()
@@ -84,19 +107,21 @@ class Simulator:
         for phase in program.phases:
             phase_gene.append(phase.duration)
 
-        print(phase_gene)
+        #print(phase_gene)
 
         # apply new tlogic if any
         if gene != None:
             self.apply_new_tlogic(gene)
 
-        step = 0
+        cum_steps = 0
         start_time = datetime.now()
+
+        #========= MAIN LOOP ============#
         for _ in range(self.steps):
             traci.simulationStep() # runs a sim step
             current_time = traci.simulation.getTime()
-            step += 1
-            stats["total_steps"] = step
+            cum_steps += 1
+            stats["total_steps"] = cum_steps
 
             # get list of vehicles this step
             departed_this_step = traci.simulation.getDepartedIDList()
@@ -109,6 +134,7 @@ class Simulator:
                 stats['vehicle_stats'][id] = {
                     'departure_time': current_time,
                     'waiting_time': 0,
+                    'time_loss': 0,
                     'arrived': False,
                 }
 
@@ -120,7 +146,7 @@ class Simulator:
                     stats['vehicle_stats'][id]['travel_time'] = (
                         current_time - stats['vehicle_stats'][id]['departure_time']
                     )
-
+            
             # updates vehicles currently on the network
             current_vehicle_ids = traci.vehicle.getIDList()
             stats['running_vehicles'] = len(current_vehicle_ids)
@@ -128,7 +154,8 @@ class Simulator:
             step_waiting = 0
             for id in current_vehicle_ids:
                 if id in stats['vehicle_stats']:
-                    # Update waiting time
+
+                    # Get waiting time
                     speed = traci.vehicle.getSpeed(id)
                     if speed < 0.1:  # Vehicle is waiting
                         waiting_increment = 1
@@ -136,10 +163,18 @@ class Simulator:
                         stats['total_waiting_time'] += waiting_increment
                         step_waiting += waiting_increment
 
-            # show traffic light
+                    # Get time loss
+                    time_loss = traci.vehicle.getTimeLoss(id)
+                    stats['vehicle_stats'][id]['time_loss'] = time_loss
+
+            # Get queue length of current step
+            step_queue_length = sum(1 for veh_id in traci.vehicle.getIDList() 
+                       if traci.vehicle.getSpeed(veh_id) < 0.1)
+            
+            stats['total_queue_length'] += step_queue_length
 
             # Show progress every 100 steps
-            if step % 100 == 0:
+            if (cum_steps % 100 == 0) and (debug):
                 print(f"  Step {current_time:.0f}s: "
                       f"Running: {len(current_vehicle_ids)}, "
                       f"Departed: {len(departed_vehicles)}, "
@@ -150,28 +185,34 @@ class Simulator:
                 print("Warning: Simulation exceeded 24 hours, stopping.")
                 break
         
-        # END OF LOOP #
+        #======== END OF LOOP ============#
         end_time = datetime.now()
         elapsed_time = (end_time-start_time).total_seconds()
 
         # Finalize stats
         stats['departed_count'] = len(departed_vehicles)
         stats['arrived_count'] = len(arrived_vehicles)
-        
-        # Calculate total waiitng time
-        total_waiting_time = 0
+        stats['average_waiting_time'] = (stats['total_waiting_time'] / stats['departed_count'] if stats['departed_count'] > 0 else 0)
+
         for id in arrived_vehicles:
             if id in stats['vehicle_stats']:
-                total_waiting_time += stats['vehicle_stats'][id].get('waiting_time',0)
+                stats['total_time_loss'] += stats['vehicle_stats'][id]['time_loss']
 
-        stats['total_waiting_time'] = total_waiting_time
-        stats['average_waiting_time'] = total_waiting_time / stats['departed_count']
-        
+        stats['average_time_loss'] = (stats['total_time_loss'] / stats['arrived_count'] if stats['arrived_count'] > 0 else 0)
+
+        stats['average_queue_length'] = stats['total_queue_length'] / cum_steps
+
+        # END TRACI
         traci.close()
-        print(f"DONE at: {elapsed_time}s")
-        print(f"total waiting time: {stats['total_waiting_time']}s")
-        print(f"average waiting time: {stats['average_waiting_time']}")
-        print(f"arrived total: {stats['arrived_count']}")
-        print(f"departed total: {stats['departed_count']}")
 
-        return stats['average_waiting_time']
+        if debug:
+            print("\n=== SIMULATION RESULTS ===")
+            print(f"Simulation time: {elapsed_time:.1f}s real, {cum_steps}s simulated")
+            print(f"Vehicles: {stats['departed_count']} departed, {stats['arrived_count']} arrived")
+            print(f"Average waiting time: {stats['average_waiting_time']:.2f}s")
+            print(f"Average time loss: {stats['average_time_loss']:.2f}s")
+            print(f"Average queue length: {stats['average_queue_length']:.2f} vehicles")
+            print(f"Total waiting time: {stats['total_waiting_time']}s")
+            print("==========================\n")
+
+        return stats
