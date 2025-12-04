@@ -3,7 +3,7 @@ import random
 
 class Mutation:
     
-    def gaussian_mutate(gene, mutation_rate=0.2, sigma=5.0):
+    def gaussian_mutate(gene, mutation_rate=0.25, sigma=5.0):
         mutated = []
         for value in gene:
             if random.random() < mutation_rate:
@@ -15,7 +15,7 @@ class Mutation:
                 mutated.append(value)
         return mutated
     
-    def random_reset_mutate(gene, mutation_rate=0.1):
+    def random_reset_mutate(gene, mutation_rate=0.25):
         mutated = []
         for value in gene:
             if random.random() < mutation_rate:
@@ -26,7 +26,7 @@ class Mutation:
                 mutated.append(value)
         return mutated
     
-    def creep_mutate(gene, mutation_rate=0.1):
+    def creep_mutate(gene, mutation_rate=0.25):
         mutated = []
         for value in gene:
             if random.random() < mutation_rate:

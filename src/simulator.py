@@ -19,41 +19,30 @@ class Simulator:
         original_logic = logics[0]
         original_phases = original_logic.phases
         
-        # Create new phases with yellow insertion
-        new_phases = []
-        yellow_duration = 3.0  # Fixed 3-second yellow phase
+        # Filter out yellow phases
+        non_yellow_phases = []
+        for phase in original_phases:
+            if not any(c == 'y' or c == 'Y' for c in phase.state):
+                non_yellow_phases.append(phase)
         
-        for i, (duration, old_phase) in enumerate(zip(gene, original_phases)):
-            # Add the current phase (green or other)
-            new_phase = traci.trafficlight.Phase(
-                duration=float(duration),
-                state=old_phase.state,
-                minDur=old_phase.minDur,
-                maxDur=old_phase.maxDur
-            )
-            new_phases.append(new_phase)
-            
-            # Check if we need a yellow phase after this phase
-            # Create yellow phase by changing all non-red signals to yellow
-            current_state = old_phase.state
-            yellow_state = ""
-            
-            for char in current_state:
-                if char == 'r' or char == 'R':
-                    yellow_state += char  # Keep red as red
-                else:
-                    yellow_state += 'y'   # Change everything else to yellow
-            
-            # Only add yellow phase if it's different from current state
-            # (i.e., if there were any non-red signals to change)
-            if yellow_state != current_state:
-                yellow_phase = traci.trafficlight.Phase(
-                    duration=yellow_duration,
-                    state=yellow_state,
-                    minDur=yellow_duration,  # Fixed duration
-                    maxDur=yellow_duration   # Fixed duration
+        # Now gene should match non_yellow_phases count
+        new_phases = []
+        gene_idx = 0
+        
+        for old_phase in original_phases:
+            if any(c == 'y' or c == 'Y' for c in old_phase.state):
+                # Keep yellow phase AS-IS (original duration)
+                new_phases.append(old_phase)
+            else:
+                # Apply gene duration to non-yellow phases
+                new_phase = traci.trafficlight.Phase(
+                    duration=float(gene[gene_idx]),
+                    state=old_phase.state,
+                    minDur=old_phase.minDur,
+                    maxDur=old_phase.maxDur
                 )
-                new_phases.append(yellow_phase)
+                new_phases.append(new_phase)
+                gene_idx += 1
         
         new_logic = traci.trafficlight.Logic(
             programID=f"optimized_{traci.simulation.getTime()}",
@@ -65,7 +54,7 @@ class Simulator:
         
         traci.trafficlight.setProgramLogic(self.tl_id, new_logic)
         if debug:
-            print(f"Applied gene {gene} to {self.tl_id} with yellow phases added")
+            print(f"Applied gene {gene} to {self.tl_id}")
 
     def simulate(self, gene=None, debug=False):
         

@@ -1,5 +1,7 @@
 from genetic_algorithm import GA
 from config import Config as c
+from ga_exporter import GAExporter
+
 import xml.etree.ElementTree as ET
 
 def get_gene_from_network(network_file_path, junction_id="j1"):
@@ -17,20 +19,37 @@ def get_gene_from_network(network_file_path, junction_id="j1"):
         return None
     
     gene = []
-    for phase in tl_logic.findall('phase'):
-        duration = phase.get('duration')
-        if duration:
-            gene.append(float(duration))
+    phases = list(tl_logic.findall('phase'))
+    
+    # Filter only green phases (typically every other phase, starting from 0)
+    for i, phase in enumerate(phases):
+        if i % 2 == 0:  # Even indices are green phases
+            duration = phase.get('duration')
+            if duration:
+                gene.append(float(duration))
+    
+    # Alternative: Filter by state (contains 'G' for green)
+    # gene = []
+    # for phase in phases:
+    #     state = phase.get('state', '')
+    #     if 'G' in state:  # This is a green phase
+    #         duration = phase.get('duration')
+    #         if duration:
+    #             gene.append(float(duration))
     
     if not gene:
-        print(f"Error: No phases found for '{junction_id}'")
+        print(f"Error: No green phases found for '{junction_id}'")
         return None
     
+    print(f"Found {len(gene)} green phases: {gene}")
     return gene
 
 # ================================ #
 # ENTRY
 # ================================ #
 gene = get_gene_from_network(c.PATH_TO_NETWORK, c.JUNCTION_ID)
+
 ga = GA()
-ga.run_ga([15,15,15,15])
+
+best_genes, best_fitness, baseline_fitness, history = ga.run_ga(gene)
+#GAExporter.export_history_to_csv(history, best_genes, best_fitness, baseline_fitness, output_dir="../output/test1")

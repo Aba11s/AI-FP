@@ -31,7 +31,37 @@ class GA:
 
         return population
     
-    def tournament_selection(self, fitnesses, tournament_size=3, select_count=None):
+    def create_initial_population_diverse(self, base_gene):
+        popsize = c.POPULATION - 1
+        population = [base_gene]
+        
+        generated = set()
+        generated.add(tuple(base_gene))  # Convert to tuple for hashing
+        
+        attempts = 0
+        while len(population) < c.POPULATION and attempts < 1000:
+            gene = []
+            for base_green in base_gene:
+                variation = random.uniform(0.7, 1.3)
+                new_green = int(base_green * variation)
+                new_green = max(10, min(30, new_green))
+                gene.append(new_green)
+            
+            gene_tuple = tuple(gene)
+            if gene_tuple not in generated:
+                generated.add(gene_tuple)
+                population.append(gene)
+            
+            attempts += 1
+        
+        # If couldn't generate enough unique, fill with random
+        while len(population) < c.POPULATION:
+            gene = [random.randint(10, 30) for _ in range(4)]
+            population.append(gene)
+        
+        return population
+    
+    def tournament_selection(self, fitnesses, tournament_size=2, select_count=None):
         if select_count is None:
             select_count = len(fitnesses)
         
@@ -70,8 +100,8 @@ class GA:
             'delay': baseline_stats['average_time_loss']
         })
         
-        baseline_delay = baseline_stats['average_time_loss']
-        population = self.create_initial_population(gene)
+        baseline_fitness = baseline_stats['average_time_loss']
+        population = self.create_initial_population_diverse(gene)
         
         best_genes = None
         best_fitness = float('inf')
@@ -144,8 +174,8 @@ class GA:
                 
                 child1, child2 = Crossover.single_point(parent1, parent2)
                 
-                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.1)
-                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.1)
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.25)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.25)
                 
                 children.extend([child1, child2])
 
@@ -153,14 +183,14 @@ class GA:
                 children.append(population[selected_indices[-1]])
 
             # ADD ELITISM
-            children[0] = best_genes.copy()
+            children[0] = gen_best_genes.copy()
             
             # SET NEXT GENERATION
             population = children
 
             # LOGGING
             avg_fitness = sum(fitnesses) / len(fitnesses)
-            improvement = ((baseline_delay - best_fitness) / baseline_delay * 100)
+            improvement = ((baseline_fitness - best_fitness) / baseline_fitness * 100)
             print(f"Generation ({generation}); Best: {gen_best_genes}, Delay: {gen_best_fitness:.2f}s ({improvement:+.1f}%), Avg: {avg_fitness:.2f}s\n")
             
             # ELAPSED TIME
@@ -169,7 +199,7 @@ class GA:
 
             # END OF LOOP #
 
-        return best_genes, best_fitness, baseline_delay, history
+        return best_genes, best_fitness, baseline_fitness, history
     
 
     ## PARALLEL COMPUTING WITH JOBLIB ##
@@ -240,7 +270,7 @@ class GA:
 
             # END OF LOOP #
         
-        return best_genes, best_fitness
+        return best_genes, best_fitness, baseline_fitness
 
     def evaluate_fitness_only(self, individual):
         """Return only fitness for maximum speed"""
