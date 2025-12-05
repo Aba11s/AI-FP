@@ -52,4 +52,4 @@ gene = get_gene_from_network(c.PATH_TO_NETWORK, c.JUNCTION_ID)
 ga = GA()
 
 best_genes, best_fitness, baseline_fitness, history = ga.run_ga(gene)
-#GAExporter.export_history_to_csv(history, best_genes, best_fitness, baseline_fitness, output_dir="../output/test1")
+GAExporter.export_history_to_csv(history, best_genes, best_fitness, baseline_fitness, output_dir="./output/test1")

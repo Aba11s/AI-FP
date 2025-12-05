@@ -164,7 +164,7 @@ class GA:
                 best_fitness = gen_best_fitness
 
             # TOURNAMENT SELECTION
-            selected_indices = self.tournament_selection(fitnesses, select_count=c.POPULATION)
+            selected_indices = self.tournament_selection(fitnesses, tournament_size=4  ,select_count=c.POPULATION)
 
             # CROSSOVER & MUTATION
             children = []
@@ -174,8 +174,8 @@ class GA:
                 
                 child1, child2 = Crossover.single_point(parent1, parent2)
                 
-                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.25)
-                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.25)
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.5)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.5)
                 
                 children.extend([child1, child2])
 
@@ -183,7 +183,8 @@ class GA:
                 children.append(population[selected_indices[-1]])
 
             # ADD ELITISM
-            children[0] = gen_best_genes.copy()
+            children[0] = gen_best_genes.copy()  # Add elite
+            random.shuffle(children) 
             
             # SET NEXT GENERATION
             population = children
@@ -254,7 +255,8 @@ class GA:
                 children.append(population[selected_indices[-1]])
 
             # ADD ELITISM
-            children[0] = best_genes.copy()
+            children[0] = gen_best_genes.copy()  # Add elite
+            random.shuffle(children)  # Mix it up!
             
             # SET NEXT GENERATION
             population = children

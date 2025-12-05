@@ -2,4 +2,4 @@ from simulator import Simulator
 
 sim = Simulator()
 
-sim.simulate(debug=True)
+sim.simulate([28,10,10,10],debug=True)

@@ -3,8 +3,8 @@
 class Config:
 
     # GA
-    POPULATION = 5
-    GENERATIONS = 10
+    POPULATION = 10
+    GENERATIONS = 20
     CROSSOVER_METHOD = "uniform"
     SELECTION_METHOD = "tournament"
 
