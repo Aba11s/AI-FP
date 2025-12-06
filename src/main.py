@@ -2,7 +2,6 @@ from genetic_algorithm import GA
 from config import Config as c
 from ga_exporter import GAExporter
 from ga_exporter_2 import SimpleGAExporter
-from utils.ga_visualizer import GAVisualizer
 
 import xml.etree.ElementTree as ET
 

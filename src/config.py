@@ -1,14 +1,13 @@
 class Config:
     # GA Parameters
-    POPULATION = 5
-    GENERATIONS = 5
+    POPULATION = 20
+    GENERATIONS = 25
     TOURNAMENT_SIZE = 3
     SELECT_COUNT = POPULATION  # Or POPULATION // 2 for less pressure
     MUTATION_RATE = 0.5
     MUTATION_SIGMA = 2.0
     MUTATION_DECAY = 0.995
     MIN_MUTATION_RATE = 0.2
-    SIGMA = 2.0
     
     # Signal Constraints
     NUM_SIGNALS = 4

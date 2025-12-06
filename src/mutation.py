@@ -9,7 +9,7 @@ class Mutation:
             if random.random() < mutation_rate:
                 # Gaussian mutation
                 new_value = value + random.gauss(0, sigma)
-                new_value = max(10, min(30, int(new_value)))
+                new_value = max(10, min(30, round(new_value, 1)))
                 mutated.append(new_value)
             else:
                 mutated.append(value)

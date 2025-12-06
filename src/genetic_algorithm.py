@@ -328,8 +328,8 @@ class GA:
                 curr_mutation_rate = c.MUTATION_RATE * (c.MUTATION_DECAY ** generation)
                 curr_mutation_rate = max(c.MIN_MUTATION_RATE, curr_mutation_rate)
 
-                child1 = Mutation.gaussian_mutate(child1, mutation_rate=curr_mutation_rate, sigma=c.SIGMA)
-                child2 = Mutation.gaussian_mutate(child2, mutation_rate=curr_mutation_rate, sigma=c.SIGMA)
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=curr_mutation_rate, sigma=c.MUTATION_SIGMA)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=curr_mutation_rate, sigma=c.MUTATION_SIGMA)
                 
                 children.extend([child1, child2])
 

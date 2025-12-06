@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2025-12-04T20:49:36.203347+07:00 by Eclipse SUMO netedit 1.25.0
+<!-- generated on 2025-12-06T15:28:46.859155+07:00 by Eclipse SUMO netedit 1.25.0
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
     <!-- Vehicles, persons and containers (sorted by depart) -->
-    <flow id="f_0" begin="0.00" end="3600.00" perHour="1000.00" departLane="random" from="E0" to="E0.292"/>
-    <flow id="f_1" begin="0.00" end="3600.00" perHour="1000.00" departLane="random" from="E0" to="E1"/>
-    <flow id="f_2" begin="0.00" end="3600.00" perHour="1000.00" departLane="random" from="E0" to="E2"/>
+    <flow id="f_0" begin="0.00" end="3600.00" perHour="750.00" departLane="random" from="-E2" to="E1"/>
+    <flow id="f_1" begin="0.00" end="3600.00" perHour="250.00" departLane="random" from="-E2" to="-E00"/>
+    <flow id="f_10" begin="0.00" end="3600.00" perHour="375.00" departLane="random" from="-E0" to="-E00"/>
+    <flow id="f_11" begin="0.00" end="3600.00" perHour="125.00" departLane="random" from="-E0" to="E2"/>
+    <flow id="f_2" begin="0.00" end="3600.00" perHour="500.00" departLane="random" from="-E2" to="E0.292"/>
+    <flow id="f_3" begin="0.00" end="3600.00" perHour="500.00" departLane="random" from="-E1" to="-E00"/>
+    <flow id="f_4" begin="0.00" end="3600.00" perHour="750.00" departLane="random" from="-E1" to="E2"/>
+    <flow id="f_5" begin="0.00" end="3600.00" perHour="250.00" departLane="random" from="-E1" to="E0.292"/>
+    <flow id="f_6" begin="0.00" end="3600.00" perHour="375.00" departLane="random" from="E0" to="E0.292"/>
+    <flow id="f_7" begin="0.00" end="3600.00" perHour="125.00" departLane="random" from="E0" to="E1"/>
+    <flow id="f_8" begin="0.00" end="3600.00" perHour="250.00" departLane="random" from="E0" to="E2"/>
+    <flow id="f_9" begin="0.00" end="3600.00" perHour="250.00" departLane="random" from="-E0" to="E1"/>
 </routes>
