@@ -1,14 +1,15 @@
 from ga_visualizer import GAVisualizer
 
-output_path = "./output/tests/test1/"
-convergence_csv = "convergence_20251206_153834.csv"
-gene_statistics_csv = "gene_statistics_20251206_153834.csv"
+output_path = "./output/results/result_1/"
+convergence_csv = "convergence_20251206_185116.csv"
+gene_statistics_csv = "gene_statistics_20251206_185116.csv"
+plot_output = "ga_plots/plots_1"
 
 # Visualize convergence data
-convergence_df = GAVisualizer.visualize_convergence(output_path+convergence_csv)
+convergence_df = GAVisualizer.visualize_convergence(output_path+convergence_csv, output_dir=plot_output)
 
 # Visualize gene statistics
-gene_df = GAVisualizer.visualize_gene_statistics(output_path+gene_statistics_csv)
+gene_df = GAVisualizer.visualize_gene_statistics(output_path+gene_statistics_csv, output_dir=plot_output)
 
 # Create comprehensive comparison
 '''GAVisualizer.visualize_comparison(

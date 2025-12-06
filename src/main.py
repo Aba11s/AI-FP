@@ -60,7 +60,7 @@ SimpleGAExporter.export_parallel_results(
     best_fitness=best_fitness,
     baseline_fitness=baseline_fitness,
     history=history,
-    output_dir="./output/tests/test1"
+    output_dir="./output/results/result_1"
 )
 
 

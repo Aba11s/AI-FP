@@ -7,7 +7,7 @@
 
     <input>
         <net-file value="6lane4way.net.xml"/>
-        <route-files value="6lane4way.rou.xml"/>
+        <route-files value="6lane4way_mixed2.rou.xml"/>
     </input>
     <processing>
         <lateral-resolution value="0.25"/>
