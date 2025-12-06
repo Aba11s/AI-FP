@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "timestamp": "20251206_153834",
+    "export_time": "2025-12-06T15:38:34.341812",
+    "algorithm": "Parallel GA with Statistics"
+  },
+  "performance": {
+    "baseline_fitness": 183.27354742537264,
+    "best_fitness": 166.88115870014227,
+    "improvement_percent": 8.944219695373775
+  },
+  "best_solution": {
+    "genes": [
+      23.0,
+      19.0,
+      19.0,
+      17.0
+    ],
+    "fitness": 166.88115870014227
+  },
+  "total_generations": 5,
+  "gene_length": 4,
+  "convergence_data": {
+    "generations": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "best_fitness": [
+      167.9708776688374,
+      167.97087766883723,
+      166.88115870014244,
+      166.88115870014227,
+      166.88115870014232
+    ],
+    "avg_fitness": [
+      196.53936785219847,
+      172.65342080254163,
+      170.06172063249824,
+      170.51938814358306,
+      169.3457340271234
+    ],
+    "diversity": [
+      1.0,
+      0.6,
+      0.8,
+      0.4,
+      0.6
+    ]
+  }
+}

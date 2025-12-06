@@ -1,6 +1,8 @@
 from genetic_algorithm import GA
 from config import Config as c
 from ga_exporter import GAExporter
+from ga_exporter_2 import SimpleGAExporter
+from utils.ga_visualizer import GAVisualizer
 
 import xml.etree.ElementTree as ET
 
@@ -51,5 +53,15 @@ gene = get_gene_from_network(c.PATH_TO_NETWORK, c.JUNCTION_ID)
 
 ga = GA()
 
-best_genes, best_fitness, baseline_fitness, history = ga.run_ga(gene)
-GAExporter.export_history_to_csv(history, best_genes, best_fitness, baseline_fitness, output_dir="./output/test1")
+# PARALLEL WITH STATS
+best_genes, best_fitness, baseline_fitness, history = ga.run_ga_parallel_with_stats(gene)
+
+SimpleGAExporter.export_parallel_results(
+    best_genes=best_genes,
+    best_fitness=best_fitness,
+    baseline_fitness=baseline_fitness,
+    history=history,
+    output_dir="./output/tests/test1"
+)
+
+

@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import random
+import numpy as np
 from joblib import Parallel, delayed
 
 from config import Config as c
@@ -10,42 +11,26 @@ from crossover import Crossover
 from mutation import Mutation
 
 class GA:
+    """Genetic Algorithm for traffic signal optimization"""
 
     def __init__(self):
-        ...
+        pass
 
     def create_initial_population(self, base_gene):
-        popsize = c.POPULATION - 1
-
-        population = [base_gene]
-
-        for _ in range(popsize):
-            gene = []
-            for base_duration in base_gene:
-                variation = random.uniform(0.7, 1.3)
-                new_duration = int(base_duration * variation)
-                new_duration = max(10, min(30, new_duration))
-                gene.append(new_duration)
-            
-            population.append(gene)
-
-        return population
-    
-    def create_initial_population_diverse(self, base_gene):
-        popsize = c.POPULATION - 1
+        """Create initial population with some diversity"""
         population = [base_gene]
         
         generated = set()
-        generated.add(tuple(base_gene))  # Convert to tuple for hashing
+        generated.add(tuple(base_gene)) 
         
         attempts = 0
-        while len(population) < c.POPULATION and attempts < 1000:
+        while len(population) < c.POPULATION and attempts < c.MAX_INIT_ATTEMPTS:
             gene = []
-            for base_green in base_gene:
-                variation = random.uniform(0.7, 1.3)
-                new_green = int(base_green * variation)
-                new_green = max(10, min(30, new_green))
-                gene.append(new_green)
+            for base_duration in base_gene:
+                variation = random.uniform(c.INIT_VARIATION_MIN, c.INIT_VARIATION_MAX)
+                new_duration = int(base_duration * variation)
+                new_duration = max(c.MIN_GREEN, min(c.MAX_GREEN, new_duration))
+                gene.append(new_duration)
             
             gene_tuple = tuple(gene)
             if gene_tuple not in generated:
@@ -54,46 +39,40 @@ class GA:
             
             attempts += 1
         
-        # If couldn't generate enough unique, fill with random
+        # Fill remaining slots with random genes
         while len(population) < c.POPULATION:
-            gene = [random.randint(10, 30) for _ in range(4)]
+            gene = [random.randint(c.MIN_GREEN, c.MAX_GREEN) for _ in range(c.NUM_SIGNALS)]
             population.append(gene)
         
         return population
     
-    def tournament_selection(self, fitnesses, tournament_size=2, select_count=None):
-        if select_count is None:
-            select_count = len(fitnesses)
-        
+    def tournament_selection(self, fitnesses):
+        """Tournament selection for parent selection"""
         selected_indices = []
         
-        for _ in range(select_count):
-            # Pick random tournament participants
-            tournament_indices = random.sample(range(len(fitnesses)), tournament_size)
-            
-            # Find the best (lowest fitness for minimization)
+        for _ in range(c.SELECT_COUNT):
+            tournament_indices = random.sample(range(len(fitnesses)), c.TOURNAMENT_SIZE)
             tournament_fitness = [fitnesses[i] for i in tournament_indices]
             winner_idx = tournament_indices[tournament_fitness.index(min(tournament_fitness))]
-            
             selected_indices.append(winner_idx)
         
         return selected_indices
 
-    def run_ga(self, gene):
-
+    def run_ga(self, base_gene):
+        """Main GA execution with full logging"""
         simulator = Simulator()
         history = {
-        'baseline': {
-            'gene': gene,
-            'waiting_time': None,
-            'queue_length': None,
-            'delay': None
-        },
-        'generations': []
+            'baseline': {
+                'gene': base_gene,
+                'waiting_time': None,
+                'queue_length': None,
+                'delay': None
+            },
+            'generations': []
         }
         
         # Evaluate baseline
-        baseline_stats = simulator.simulate(gene)
+        baseline_stats = simulator.simulate(base_gene)
         history['baseline'].update({
             'waiting_time': baseline_stats['average_waiting_time'],
             'queue_length': baseline_stats['average_queue_length'],
@@ -101,17 +80,17 @@ class GA:
         })
         
         baseline_fitness = baseline_stats['average_time_loss']
-        population = self.create_initial_population_diverse(gene)
+        population = self.create_initial_population(base_gene)
         
         best_genes = None
         best_fitness = float('inf')
         
         for generation in range(c.GENERATIONS):
-
-            start = time.time()
+            start_time = time.time()
 
             print(f"Generation ({generation})")
 
+            # Generation tracking
             gen_history = {
                 'generation': generation,
                 'genes': [],
@@ -126,11 +105,7 @@ class GA:
             
             # EVALUATION
             fitnesses = []
-            idx = 0
-            for individual in population:
-                # LOG #
-                print(f"individual ({idx});", end="")
-
+            for idx, individual in enumerate(population):
                 stats = simulator.simulate(individual)
                 fitness = stats['average_time_loss']
                 fitnesses.append(fitness)
@@ -141,20 +116,17 @@ class GA:
                 gen_history['waiting_times'].append(stats['average_waiting_time'])
                 gen_history['queue_lengths'].append(stats['average_queue_length'])
 
-                # LOG #
-                print(f"gene: {individual}; delay: {stats['average_time_loss']:.2f}s")
-
-                idx += 1
+                # Log individual
+                print(f"individual ({idx}); gene: {individual}; delay: {stats['average_time_loss']:.2f}s")
             
+            # Update generation history
             gen_history['best_idx'] = fitnesses.index(min(fitnesses))
             gen_history['best_gene'] = population[gen_history['best_idx']].copy()
             gen_history['best_fitness'] = fitnesses[gen_history['best_idx']]
             gen_history['avg_fitness'] = sum(fitnesses) / len(fitnesses)
-            
-            # Store generation
             history['generations'].append(gen_history)
 
-            # TRACK BEST
+            # Track overall best
             gen_best_idx = gen_history['best_idx']
             gen_best_genes = population[gen_best_idx]
             gen_best_fitness = fitnesses[gen_best_idx]
@@ -163,70 +135,67 @@ class GA:
                 best_genes = gen_best_genes.copy()
                 best_fitness = gen_best_fitness
 
-            # TOURNAMENT SELECTION
-            selected_indices = self.tournament_selection(fitnesses, tournament_size=4  ,select_count=c.POPULATION)
+            # SELECTION
+            selected_indices = self.tournament_selection(fitnesses)
 
             # CROSSOVER & MUTATION
             children = []
-            for i in range(0, c.POPULATION-1, 2):
+            for i in range(0, c.POPULATION - 1, 2):
                 parent1 = population[selected_indices[i]]
-                parent2 = population[selected_indices[i+1]]
+                parent2 = population[selected_indices[i + 1]]
                 
                 child1, child2 = Crossover.single_point(parent1, parent2)
                 
-                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.5)
-                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.5)
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=c.MUTATION_RATE)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=c.MUTATION_RATE)
                 
                 children.extend([child1, child2])
 
-            if c.POPULATION % 2 == 1:  # If odd population
+            # Handle odd population
+            if c.POPULATION % 2 == 1:
                 children.append(population[selected_indices[-1]])
 
-            # ADD ELITISM
-            children[0] = gen_best_genes.copy()  # Add elite
-            random.shuffle(children) 
+            # ELITISM
+            children[0] = gen_best_genes.copy()
+            random.shuffle(children)
             
-            # SET NEXT GENERATION
+            # NEXT GENERATION
             population = children
 
             # LOGGING
             avg_fitness = sum(fitnesses) / len(fitnesses)
             improvement = ((baseline_fitness - best_fitness) / baseline_fitness * 100)
-            print(f"Generation ({generation}); Best: {gen_best_genes}, Delay: {gen_best_fitness:.2f}s ({improvement:+.1f}%), Avg: {avg_fitness:.2f}s\n")
+            print(f"Generation ({generation}); Best: {gen_best_genes}, "
+                  f"Delay: {gen_best_fitness:.2f}s ({improvement:+.1f}%), "
+                  f"Avg: {avg_fitness:.2f}s\n")
             
-            # ELAPSED TIME
-            end = time.time()
-            print(f"elapsed time: {end-start:.2f}s")
-
-            # END OF LOOP #
+            # TIMING
+            elapsed = time.time() - start_time
+            print(f"elapsed time: {elapsed:.2f}s")
 
         return best_genes, best_fitness, baseline_fitness, history
     
-
-    ## PARALLEL COMPUTING WITH JOBLIB ##
-    def run_ga_joblib_simple(self, gene, n_jobs=-1):
-        """Super simple Joblib implementation"""
-
-        # Get baseline
-        baseline_fitness = Simulator().simulate(gene)['average_time_loss']
+    def run_ga_parallel(self, base_gene, n_jobs=-1):
+        """Parallel GA implementation using Joblib"""
+        # Initialize for consistency with other methods
+        baseline_fitness = Simulator().simulate(base_gene)['average_time_loss']
         print(f"Baseline fitness: {baseline_fitness:.2f}s")
 
-        population = self.create_initial_population(gene)
+        population = self.create_initial_population(base_gene)
         best_genes = None
         best_fitness = float('inf')
         
         for generation in range(c.GENERATIONS):
-
-            start = time.time()
+            start_time = time.time()
 
             print(f"Generation ({generation}): ", end="")
 
-            # parrallel fitness evaluation
+            # PARALLEL FITNESS EVALUATION
             fitnesses = Parallel(n_jobs=n_jobs)(
-                delayed(self.evaluate_fitness_only)(ind) for ind in population
+                delayed(self._evaluate_fitness)(ind) for ind in population
             )
             
-             # TRACK BEST
+            # Track best
             gen_best_idx = fitnesses.index(min(fitnesses))
             gen_best_genes = population[gen_best_idx]
             gen_best_fitness = fitnesses[gen_best_idx]
@@ -235,48 +204,154 @@ class GA:
                 best_genes = gen_best_genes.copy()
                 best_fitness = gen_best_fitness
 
-            # TOURNAMENT SELECTION
-            selected_indices = self.tournament_selection(fitnesses, select_count=c.POPULATION)
+            # SELECTION
+            selected_indices = self.tournament_selection(fitnesses)
 
             # CROSSOVER & MUTATION
             children = []
-            for i in range(0, c.POPULATION-1, 2):
+            for i in range(0, c.POPULATION - 1, 2):
                 parent1 = population[selected_indices[i]]
-                parent2 = population[selected_indices[i+1]]
+                parent2 = population[selected_indices[i + 1]]
                 
                 child1, child2 = Crossover.single_point(parent1, parent2)
                 
-                child1 = Mutation.gaussian_mutate(child1, mutation_rate=0.1)
-                child2 = Mutation.gaussian_mutate(child2, mutation_rate=0.1)
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=c.MUTATION_RATE)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=c.MUTATION_RATE)
                 
                 children.extend([child1, child2])
 
-            if c.POPULATION % 2 == 1:  # If odd population
+            # Handle odd population
+            if c.POPULATION % 2 == 1:
                 children.append(population[selected_indices[-1]])
 
-            # ADD ELITISM
-            children[0] = gen_best_genes.copy()  # Add elite
-            random.shuffle(children)  # Mix it up!
+            # ELITISM
+            children[0] = gen_best_genes.copy()
+            random.shuffle(children)
             
-            # SET NEXT GENERATION
+            # NEXT GENERATION
             population = children
 
-             # LOGGING
+            # LOGGING
             avg_fitness = sum(fitnesses) / len(fitnesses)
             improvement = ((baseline_fitness - best_fitness) / baseline_fitness * 100)
-            print(f"Best: {best_fitness:.2f}s ({improvement:+.1f}%), Avg: {avg_fitness:.2f}s ", end="")
+            print(f"Best: {best_fitness:.2f}s ({improvement:+.1f}%), "
+                  f"Avg: {avg_fitness:.2f}s ", end="")
 
-            # ELAPSED TIME
-            end = time.time()
-            print(f"elapsed time: {end-start:.2f}s")
+            # TIMING
+            elapsed = time.time() - start_time
+            print(f"elapsed time: {elapsed:.2f}s")
 
-            # END OF LOOP #
-        
         return best_genes, best_fitness, baseline_fitness
 
-    def evaluate_fitness_only(self, individual):
-        """Return only fitness for maximum speed"""
-        from simulator import Simulator
+    def _evaluate_fitness(self, individual):
+        """Helper for parallel fitness evaluation"""
         return Simulator().simulate(individual)['average_time_loss']
+    
+    def run_ga_parallel_with_stats(self, base_gene, n_jobs=-1):
+        """Parallel GA with comprehensive statistics"""
+        
+        # Evaluate baseline
+        baseline_fitness = Simulator().simulate(base_gene)['average_time_loss']
+        print(f"Baseline fitness: {baseline_fitness:.2f}s")
+        
+        # Initialize population and tracking
+        population = self.create_initial_population(base_gene)
+        best_genes = None
+        best_fitness = float('inf')
+        
+        # Initialize history
+        history = {
+            'baseline_fitness': baseline_fitness,
+            'generations': []
+        }
+        
+        for generation in range(c.GENERATIONS):
+            start_time = time.time()
 
+            print(f"Generation ({generation}): ", end="")
 
+            # PARALLEL FITNESS EVALUATION
+            fitnesses = Parallel(n_jobs=n_jobs)(
+                delayed(self._evaluate_fitness)(ind) for ind in population
+            )
+            
+            # Calculate statistics
+            gen_best_idx = fitnesses.index(min(fitnesses))
+            gen_best_genes = population[gen_best_idx]
+            gen_best_fitness = fitnesses[gen_best_idx]
+            
+            # Update overall best
+            if gen_best_fitness < best_fitness:
+                best_genes = gen_best_genes.copy()
+                best_fitness = gen_best_fitness
+            
+            # Population diversity metrics
+            unique_genes = len(set(tuple(g) for g in population))
+            diversity = unique_genes / len(population)
+            
+            # Gene-wise statistics
+            gene_stats = []
+            if population:
+                for i in range(len(population[0])):
+                    gene_values = [ind[i] for ind in population]
+                    gene_stats.append({
+                        'index': i,
+                        'mean': sum(gene_values) / len(gene_values),
+                        'min': min(gene_values),
+                        'max': max(gene_values),
+                        'std': np.std(gene_values) if len(gene_values) > 1 else 0
+                    })
+            
+            # Store generation stats
+            history['generations'].append({
+                'generation': generation,
+                'best_gene': gen_best_genes.copy(),
+                'best_fitness': gen_best_fitness,
+                'avg_fitness': sum(fitnesses) / len(fitnesses),
+                'fitness_std': np.std(fitnesses) if len(fitnesses) > 1 else 0,
+                'diversity': diversity,
+                'gene_stats': gene_stats
+            })
+            
+            # SELECTION
+            selected_indices = self.tournament_selection(fitnesses)
+
+            # CROSSOVER & MUTATION
+            children = []
+            for i in range(0, c.POPULATION - 1, 2):
+                parent1 = population[selected_indices[i]]
+                parent2 = population[selected_indices[i + 1]]
+                
+                child1, child2 = Crossover.single_point(parent1, parent2)
+                
+                # Decaying Mutation
+                curr_mutation_rate = c.MUTATION_RATE * (c.MUTATION_DECAY ** generation)
+                curr_mutation_rate = max(c.MIN_MUTATION_RATE, curr_mutation_rate)
+
+                child1 = Mutation.gaussian_mutate(child1, mutation_rate=curr_mutation_rate, sigma=c.SIGMA)
+                child2 = Mutation.gaussian_mutate(child2, mutation_rate=curr_mutation_rate, sigma=c.SIGMA)
+                
+                children.extend([child1, child2])
+
+            # Handle odd population
+            if c.POPULATION % 2 == 1:
+                children.append(population[selected_indices[-1]])
+
+            # ELITISM
+            children[0] = gen_best_genes.copy()
+            random.shuffle(children)
+            
+            # NEXT GENERATION
+            population = children
+
+            # LOGGING
+            avg_fitness = sum(fitnesses) / len(fitnesses)
+            improvement = ((baseline_fitness - best_fitness) / baseline_fitness * 100)
+            print(f"Best: {best_fitness:.2f}s ({improvement:+.1f}%), "
+                  f"Avg: {avg_fitness:.2f}s, Diversity: {diversity:.2f} ", end="")
+
+            # TIMING
+            elapsed = time.time() - start_time
+            print(f"elapsed time: {elapsed:.2f}s")
+            
+        return best_genes, best_fitness, baseline_fitness, history
