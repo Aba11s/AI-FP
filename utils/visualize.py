@@ -1,8 +1,8 @@
 from ga_visualizer import GAVisualizer
 
 output_path = "./output/results/result_1/"
-convergence_csv = "convergence_20251206_185116.csv"
-gene_statistics_csv = "gene_statistics_20251206_185116.csv"
+convergence_csv = "convergence_20251206_225904.csv"
+gene_statistics_csv = "gene_statistics_20251206_225904.csv"
 plot_output = "ga_plots/plots_1"
 
 # Visualize convergence data
