@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-12-12T21:48:02.930318+07:00 by Eclipse SUMO sumo 1.25.0
+-->
+
+<sumoConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <configuration>
+        <configuration-file value=""/>
+    </configuration>
+
+    <input>
+        <net-file value="cibubur.net.xml"/>
+        <route-files value="cibubur_mixed.rou.xml"/>
+    </input>
+    <processing>
+        <lateral-resolution value="0.25"/>
+    </processing>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+    </time>
+
+
+</sumoConfiguration>

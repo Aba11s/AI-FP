@@ -50,6 +50,8 @@ def get_gene_from_network(network_file_path, junction_id="j1"):
 # ================================ #
 gene = get_gene_from_network(c.PATH_TO_NETWORK, c.JUNCTION_ID)
 
+
+
 ga = GA()
 
 # PARALLEL WITH STATS
@@ -60,7 +62,7 @@ SimpleGAExporter.export_parallel_results(
     best_fitness=best_fitness,
     baseline_fitness=baseline_fitness,
     history=history,
-    output_dir="./output/results/result_1"
+    output_dir="./output/results/result_3"
 )
 
 
