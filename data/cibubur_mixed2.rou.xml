@@ -6,16 +6,16 @@
         <vType id="car" vClass="passenger" probability="0.35" lcSublane="10" maxSpeedLat="0.6" minGap="1" latAlignment="center"/>
     </vTypeDistribution>
     
-    <flow id="f_0" begin="0.00" end="3600.00" vehsPerHour="2000.0" departLane="random" type="mixedTraffic">
+    <flow id="f_0" begin="0.00" end="3600.00" vehsPerHour="3000.0" departLane="random" type="mixedTraffic">
         <route edges="E0 E00"/>
     </flow>
-    <flow id="f_1" begin="0.00" end="3600.00" vehsPerHour="2000.0" departLane="random" type="mixedTraffic">
+    <flow id="f_1" begin="0.00" end="3600.00" vehsPerHour="3000.0" departLane="random" type="mixedTraffic">
         <route edges="-E0 -E0.232"/>
     </flow>
-    <flow id="f_10" begin="0.00" end="3600.00" vehsPerHour="100.0" departLane="random" type="mixedTraffic">
+    <flow id="f_10" begin="0.00" end="3600.00" vehsPerHour="200.0" departLane="random" type="mixedTraffic">
         <route edges="-E1 -E0.232"/>
     </flow>
-    <flow id="f_11" begin="0.00" end="3600.00" vehsPerHour="100.0" departLane="random" type="mixedTraffic">
+    <flow id="f_11" begin="0.00" end="3600.00" vehsPerHour="200.0" departLane="random" type="mixedTraffic">
         <route edges="-E1 E00"/>
     </flow>
     <flow id="f_2" begin="0.00" end="3600.00" vehsPerHour="300.0" departLane="random" type="mixedTraffic">
@@ -30,16 +30,16 @@
     <flow id="f_5" begin="0.00" end="3600.00" vehsPerHour="300.0" departLane="random" type="mixedTraffic">
         <route edges="-E0 E1"/>
     </flow>
-    <flow id="f_6" begin="0.00" end="3600.00" vehsPerHour="150.0" departLane="random" type="mixedTraffic">
+    <flow id="f_6" begin="0.00" end="3600.00" vehsPerHour="300.0" departLane="random" type="mixedTraffic">
         <route edges="-E2 E1"/>
     </flow>
-    <flow id="f_7" begin="0.00" end="3600.00" vehsPerHour="150.0" departLane="random" type="mixedTraffic">
+    <flow id="f_7" begin="0.00" end="3600.00" vehsPerHour="300.0" departLane="random" type="mixedTraffic">
         <route edges="-E1 E2"/>
     </flow>
-    <flow id="f_8" begin="0.00" end="3600.00" vehsPerHour="150.0" departLane="random" type="mixedTraffic">
+    <flow id="f_8" begin="0.00" end="3600.00" vehsPerHour="300.0" departLane="random" type="mixedTraffic">
         <route edges="-E2 -E0.232"/>
     </flow>
-    <flow id="f_9" begin="0.00" end="3600.00" vehsPerHour="50.0" departLane="random" type="mixedTraffic">
+    <flow id="f_9" begin="0.00" end="3600.00" vehsPerHour="100.0" departLane="random" type="mixedTraffic">
         <route edges="-E2 E00"/>
     </flow>
 </routes>

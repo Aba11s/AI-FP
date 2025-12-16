@@ -9,12 +9,13 @@ class GAVisualizer:
     """Visualize GA convergence and gene statistics"""
     
     @staticmethod
-    def visualize_convergence(convergence_csv_path, output_dir="ga_plots"):
+    def visualize_convergence(convergence_csv_path, baseline_fitness=None, output_dir="ga_plots"):
         """
-        Visualize GA convergence metrics
+        Visualize GA convergence metrics with baseline comparison
         
         Args:
             convergence_csv_path: Path to convergence CSV file
+            baseline_fitness: Baseline fitness value for comparison
             output_dir: Directory to save plots
         """
         # Read data
@@ -27,31 +28,46 @@ class GAVisualizer:
         fig = plt.figure(figsize=(15, 10))
         gs = GridSpec(3, 2, figure=fig, hspace=0.3, wspace=0.3)
         
-        # Plot 1: Best Fitness over Generations
+        # Plot 1: Best Fitness over Generations with Baseline
         ax1 = fig.add_subplot(gs[0, 0])
-        ax1.plot(df['generation'], df['best_fitness'], 'b-', linewidth=2, marker='o', markersize=4)
-        ax1.set_xlabel('Generation')
-        ax1.set_ylabel('Best Fitness (s)')
-        ax1.set_title('Best Fitness Convergence')
-        ax1.grid(True, alpha=0.3)
-        ax1.set_ylim(bottom=0)
         
-        # Add improvement annotation
-        if len(df) > 1:
-            improvement = df['best_fitness'].iloc[0] - df['best_fitness'].iloc[-1]
-            ax1.annotate(f'Improvement: {improvement:.1f}s\n({df["improvement_pct"].iloc[-1]:.1f}%)',
+        # Plot GA best fitness
+        ax1.plot(df['generation'], df['best_fitness'], 'b-', linewidth=2, marker='o', markersize=4, label='GA Best')
+        
+        # Plot baseline if provided
+        if baseline_fitness is not None:
+            ax1.axhline(y=baseline_fitness, color='r', linestyle='--', linewidth=2, 
+                       label=f'Baseline: {baseline_fitness:.1f}s')
+            
+            # Add improvement annotation
+            final_improvement = ((baseline_fitness - df['best_fitness'].iloc[-1]) / baseline_fitness) * 100
+            '''ax1.annotate(f'Final: {df["best_fitness"].iloc[-1]:.1f}s\n({final_improvement:.1f}% better)',
                         xy=(df['generation'].iloc[-1], df['best_fitness'].iloc[-1]),
                         xytext=(10, 10), textcoords='offset points',
-                        bbox=dict(boxstyle="round,pad=0.3", fc="yellow", alpha=0.5))
+                        bbox=dict(boxstyle="round,pad=0.3", fc="lightgreen", alpha=0.8))'''
         
-        # Plot 2: Average Fitness over Generations
+        ax1.set_xlabel('Generation')
+        ax1.set_ylabel('Best Fitness (s)')
+        ax1.set_title('Best Fitness Convergence with Baseline')
+        ax1.grid(True, alpha=0.3)
+        ax1.set_ylim(bottom=0)
+        ax1.legend()
+        
+        # Plot 2: Average Fitness over Generations with Baseline
         ax2 = fig.add_subplot(gs[0, 1])
-        ax2.plot(df['generation'], df['avg_fitness'], 'g-', linewidth=2, marker='s', markersize=4)
+        ax2.plot(df['generation'], df['avg_fitness'], 'g-', linewidth=2, marker='s', markersize=4, label='GA Average')
+        
+        # Plot baseline if provided
+        if baseline_fitness is not None:
+            ax2.axhline(y=baseline_fitness, color='r', linestyle='--', linewidth=2, 
+                       label=f'Baseline: {baseline_fitness:.1f}s')
+        
         ax2.set_xlabel('Generation')
         ax2.set_ylabel('Average Fitness (s)')
-        ax2.set_title('Average Fitness Convergence')
+        ax2.set_title('Average Fitness with Baseline')
         ax2.grid(True, alpha=0.3)
         ax2.set_ylim(bottom=0)
+        ax2.legend()
         
         # Shaded area showing std
         ax2.fill_between(df['generation'], 
@@ -60,16 +76,23 @@ class GAVisualizer:
                         alpha=0.2, color='green', label='±1 std')
         ax2.legend()
         
-        # Plot 3: Fitness Comparison (Best vs Average)
+        # Plot 3: Fitness Comparison (Baseline vs GA)
         ax3 = fig.add_subplot(gs[1, 0])
-        ax3.plot(df['generation'], df['best_fitness'], 'b-', linewidth=2, label='Best')
-        ax3.plot(df['generation'], df['avg_fitness'], 'g-', linewidth=2, label='Average')
+        
+        # Plot baseline if provided
+        if baseline_fitness is not None:
+            ax3.axhline(y=baseline_fitness, color='r', linestyle='--', linewidth=2.5, 
+                       label=f'Baseline: {baseline_fitness:.1f}s', alpha=0.7)
+        
+        ax3.plot(df['generation'], df['best_fitness'], 'b-', linewidth=2, label='GA Best')
+        ax3.plot(df['generation'], df['avg_fitness'], 'g-', linewidth=2, label='GA Average', alpha=0.7)
+        
         ax3.set_xlabel('Generation')
         ax3.set_ylabel('Fitness (s)')
-        ax3.set_title('Best vs Average Fitness')
+        ax3.set_title('Baseline vs GA Performance')
         ax3.grid(True, alpha=0.3)
-        ax3.legend()
         ax3.set_ylim(bottom=0)
+        ax3.legend()
         
         # Plot 4: Population Diversity
         ax4 = fig.add_subplot(gs[1, 1])
@@ -80,45 +103,174 @@ class GAVisualizer:
         ax4.grid(True, alpha=0.3)
         ax4.set_ylim([0, 1.1])
         
-        # Plot 5: Improvement Percentage
+        # Plot 5: Improvement Percentage (with baseline reference)
         ax5 = fig.add_subplot(gs[2, 0])
-        ax5.plot(df['generation'], df['improvement_pct'], 'm-', linewidth=2, marker='D', markersize=4)  # Fixed: 'm' for magenta/purple
+        
+        # Calculate actual improvement percentage if baseline provided
+        if baseline_fitness is not None:
+            # Replace df['improvement_pct'] with actual calculation
+            actual_improvement = ((baseline_fitness - df['best_fitness']) / baseline_fitness) * 100
+            ax5.plot(df['generation'], actual_improvement, 'm-', linewidth=2, marker='D', markersize=4, 
+                    label='Actual Improvement')
+        else:
+            ax5.plot(df['generation'], df['improvement_pct'], 'm-', linewidth=2, marker='D', markersize=4, 
+                    label='Improvement')
+        
+        ax5.axhline(y=0, color='k', linestyle='-', linewidth=0.5, alpha=0.5)
         ax5.set_xlabel('Generation')
         ax5.set_ylabel('Improvement (%)')
         ax5.set_title('Improvement Over Baseline')
         ax5.grid(True, alpha=0.3)
-        ax5.set_ylim(bottom=0)
+        ax5.legend()
         
         # Add final value annotation
-        if len(df) > 0:
-            final_improvement = df['improvement_pct'].iloc[-1]
+        if len(df) > 0 and baseline_fitness is not None:
+            final_improvement = ((baseline_fitness - df['best_fitness'].iloc[-1]) / baseline_fitness) * 100
             ax5.annotate(f'{final_improvement:.1f}%',
-                        xy=(df['generation'].iloc[-1], df['improvement_pct'].iloc[-1]),
+                        xy=(df['generation'].iloc[-1], final_improvement),
                         xytext=(10, 10), textcoords='offset points',
                         fontweight='bold', color='darkred')
         
         # Plot 6: Fitness Standard Deviation
         ax6 = fig.add_subplot(gs[2, 1])
-        ax6.plot(df['generation'], df['fitness_std'], color='orange', linewidth=2, marker='v', markersize=4)  # Fixed: color='orange'
+        ax6.plot(df['generation'], df['fitness_std'], color='orange', linewidth=2, marker='v', markersize=4)
         ax6.set_xlabel('Generation')
         ax6.set_ylabel('Fitness Std Dev')
         ax6.set_title('Fitness Standard Deviation')
         ax6.grid(True, alpha=0.3)
         ax6.set_ylim(bottom=0)
         
-        plt.suptitle('Genetic Algorithm Convergence Analysis', fontsize=16, fontweight='bold')
+        # Add baseline text to title if provided
+        title_suffix = f" (Baseline: {baseline_fitness:.1f}s)" if baseline_fitness is not None else ""
+        plt.suptitle(f'Genetic Algorithm Convergence Analysis{title_suffix}', fontsize=16, fontweight='bold')
         plt.tight_layout()
         
         # Save plot
-        output_path = f"{output_dir}/convergence_analysis.png"
+        output_path = f"{output_dir}/convergence_with_baseline.png"
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         plt.show()
         
-        print(f"✓ Convergence plots saved to: {output_path}")
+        print(f"✓ Convergence plots with baseline saved to: {output_path}")
         
-        # Also create individual plots
-        GAVisualizer._create_individual_plots(df, output_dir)
+        # Also create a simplified comparison plot
+        GAVisualizer._create_baseline_comparison_plot(df, baseline_fitness, output_dir)
         
+        return df
+    
+    @staticmethod
+    def _create_baseline_comparison_plot(df, baseline_fitness, output_dir):
+        """Create a focused baseline comparison plot"""
+        if baseline_fitness is None:
+            return
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+        
+        # Left: GA vs Baseline fitness
+        ax1.plot(df['generation'], df['best_fitness'], 'b-', linewidth=3, marker='o', markersize=6, label='GA Best')
+        ax1.axhline(y=baseline_fitness, color='r', linestyle='--', linewidth=3, 
+                   label=f'Baseline ({baseline_fitness:.1f}s)', alpha=0.7)
+        
+        # Fill improvement area
+        ax1.fill_between(df['generation'], df['best_fitness'], baseline_fitness,
+                        where=(df['best_fitness'] < baseline_fitness),
+                        color='lightgreen', alpha=0.3, label='Improvement Area')
+        
+        ax1.set_xlabel('Generation')
+        ax1.set_ylabel('Fitness (s)')
+        ax1.set_title('GA Optimization vs Baseline')
+        ax1.grid(True, alpha=0.3)
+        ax1.legend()
+        
+        # Calculate improvement percentage
+        improvement = ((baseline_fitness - df['best_fitness']) / baseline_fitness) * 100
+        
+        # Right: Improvement percentage
+        ax2.plot(df['generation'], improvement, 'g-', linewidth=3, marker='s', markersize=6)
+        ax2.fill_between(df['generation'], improvement, 0, color='lightgreen', alpha=0.3)
+        ax2.axhline(y=0, color='k', linestyle='-', linewidth=0.5, alpha=0.5)
+        
+        ax2.set_xlabel('Generation')
+        ax2.set_ylabel('Improvement (%)')
+        ax2.set_title(f'Improvement Over Baseline\nFinal: {improvement.iloc[-1]:.1f}%')
+        ax2.grid(True, alpha=0.3)
+        
+        # Add milestone annotations
+        milestones = [0, 5, 10, 15, 20, df['generation'].iloc[-1]]
+        for milestone in milestones:
+            if milestone <= df['generation'].iloc[-1]:
+                milestone_idx = df[df['generation'] == milestone].index[0]
+                milestone_improvement = improvement.iloc[milestone_idx]
+                if milestone_improvement > 5:  # Only annotate significant improvements
+                    ax2.annotate(f'{milestone_improvement:.1f}%', 
+                               xy=(milestone, milestone_improvement),
+                               xytext=(5, 5), textcoords='offset points',
+                               fontsize=9, fontweight='bold')
+        
+        plt.tight_layout()
+        plt.savefig(f"{output_dir}/baseline_comparison_focused.png", dpi=150, bbox_inches='tight')
+        plt.show()
+    
+    @staticmethod
+    def quick_visualize_with_baseline(convergence_csv_path, baseline_fitness=None, output_dir="ga_plots"):
+        """Quick visualization with baseline comparison"""
+        df = pd.read_csv(convergence_csv_path)
+        
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Simple 2x1 plot
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+        
+        # Left: Fitness convergence with baseline
+        ax1.plot(df['generation'], df['best_fitness'], 'b-o', linewidth=2, markersize=5, label='GA Best')
+        ax1.plot(df['generation'], df['avg_fitness'], 'g-s', linewidth=2, markersize=5, label='GA Average', alpha=0.7)
+        
+        if baseline_fitness is not None:
+            ax1.axhline(y=baseline_fitness, color='r', linestyle='--', linewidth=2.5, 
+                       label=f'Baseline: {baseline_fitness:.1f}s')
+            
+            # Add final improvement text
+            final_improvement = ((baseline_fitness - df['best_fitness'].iloc[-1]) / baseline_fitness) * 100
+            ax1.text(0.02, 0.98, f'Final Improvement: {final_improvement:.1f}%',
+                    transform=ax1.transAxes, fontsize=10, fontweight='bold',
+                    verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        
+        ax1.set_xlabel('Generation')
+        ax1.set_ylabel('Fitness (s)')
+        ax1.set_title('GA vs Baseline Fitness')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Right: Improvement and Diversity
+        if baseline_fitness is not None:
+            improvement = ((baseline_fitness - df['best_fitness']) / baseline_fitness) * 100
+            ax2.plot(df['generation'], improvement, 'g-D', linewidth=2, markersize=5, label='Improvement %')
+            ax2.set_ylabel('Improvement (%)', color='green')
+            ax2.tick_params(axis='y', labelcolor='green')
+            ax2.set_ylim(bottom=0)
+            
+            ax2b = ax2.twinx()
+            ax2b.plot(df['generation'], df['diversity'], 'r-^', linewidth=2, markersize=5, label='Diversity')
+            ax2b.set_ylabel('Diversity', color='red')
+            ax2b.tick_params(axis='y', labelcolor='red')
+            ax2b.set_ylim([0, 1.1])
+            
+            ax2.set_title(f'Improvement & Diversity\nFinal: {improvement.iloc[-1]:.1f}%')
+        else:
+            ax2.plot(df['generation'], df['diversity'], 'r-^', linewidth=2, markersize=5, label='Diversity')
+            ax2.set_ylabel('Diversity')
+            ax2.set_title('Population Diversity')
+            ax2.set_ylim([0, 1.1])
+        
+        ax2.set_xlabel('Generation')
+        ax2.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        output_path = f"{output_dir}/quick_baseline_comparison.png"
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        plt.show()
+        
+        print(f"✓ Quick baseline comparison plot saved to: {output_path}")
         return df
     
     @staticmethod

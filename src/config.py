@@ -5,12 +5,12 @@ class Config:
     TOURNAMENT_SIZE = 3
     SELECT_COUNT = POPULATION  # Or POPULATION // 2 for less pressure
     MUTATION_RATE = 0.5
-    MUTATION_SIGMA = 5.0
+    MUTATION_SIGMA = 4.0
     MUTATION_DECAY = 0.99
     MIN_MUTATION_RATE = 0.2
     
     # Signal Constraints
-    NUM_SIGNALS = 2
+    NUM_SIGNALS = 4
     MIN_GREEN = 10
     MAX_GREEN = 60
     
@@ -25,5 +25,5 @@ class Config:
 
     # Paths
     PATH_TO_NETWORK = "data/cibubur.net.xml"
-    PATH_TO_ROUTE = "data/cibubur_mixed.rou.xml"
+    PATH_TO_ROUTE = "data/cibubur_mixed2.rou.xml"
     PATH_TO_SUMOCONFIG = "data/cibubur.sumocfg"

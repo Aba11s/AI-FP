@@ -1,0 +1,17 @@
+PARALLEL GA RESULTS
+Export Time,2025-12-13 14:46:06
+Total Generations,25
+
+PERFORMANCE
+Metric,Value,Unit
+Baseline Fitness,119.656307,seconds
+Optimized Fitness,63.262151,seconds
+Improvement,47.13,%
+Absolute Gain,56.394156,seconds
+
+BEST SOLUTION GENES
+Gene Index,Value
+0,30.000000
+1,28.800000
+2,10.000000
+3,10.000000
